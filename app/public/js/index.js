@@ -5,6 +5,9 @@ const SomeApp = {
         students: [],
         selectedStudent: null,
         offers: [],
+        refs: [],
+        games: [],
+        assignments: [],
         offerForm: {}
       }
     },
@@ -52,6 +55,40 @@ const SomeApp = {
                 console.error(error);
             });
         },
+        fetchRefData() {
+            fetch('/api/ref/')
+            .then( response => response.json() )
+            .then( (responseJson) => {
+                console.log(responseJson);
+                this.refs = responseJson;
+            })
+            .catch( (err) => {
+                console.error(err);
+            })
+        }, 
+        fetchGameData() {
+            fetch('/api/game/')
+            .then( response => response.json() )
+            .then( (responseJson) => {
+                console.log(responseJson);
+                this.games = responseJson;
+            })
+            .catch( (err) => {
+                console.error(err);
+            })
+        },
+        fetchAssignmentData() {
+            fetch('/api/assignment/')
+            .then( response => response.json() )
+            .then( (responseJson) => {
+                console.log(responseJson);
+                this.assignments = responseJson;
+            })
+            .catch( (err) => {
+                console.error(err);
+            })
+        }
+        ,
         postNewOffer(evt) {
           this.offerForm.studentId = this.selectedStudent.id;        
           console.log("Posting:", this.offerForm);
@@ -76,7 +113,9 @@ const SomeApp = {
         }
     },
     created() {
-        this.fetchStudentData();
+        this.fetchRefData();
+        this.fetchGameData();
+        this.fetchAssignmentData();
     }
   
   }
