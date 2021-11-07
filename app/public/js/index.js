@@ -8,7 +8,9 @@ const SomeApp = {
         refs: [],
         games: [],
         assignments: [],
-        offerForm: {}
+        offerForm: {},
+        selectedOffer: null,
+        selectedOffer: null
       }
     },
     computed: {},
@@ -87,31 +89,76 @@ const SomeApp = {
             .catch( (err) => {
                 console.error(err);
             })
-        }
-        ,
+        },
+        postOffer(evt) {
+            console.log ("Test:", this.selectedOffer);
+          if (this.selectedOffer) {
+              this.postEditOffer(evt);
+          } else {
+              this.postNewOffer(evt);
+          }
+        },
         postNewOffer(evt) {
-          this.offerForm.studentId = this.selectedStudent.id;        
-          console.log("Posting:", this.offerForm);
-          // alert("Posting!");
+            // this will post new book
+             // this.offerForm.studentId = this.selectedStudent.id;        
+              console.log("Posting:", this.offerForm);
   
-          fetch('api/offer/create.php', {
-              method:'POST',
-              body: JSON.stringify(this.offerForm),
-              headers: {
-                "Content-Type": "application/json; charset=utf-8"
-              }
-            })
-            .then( response => response.json() )
-            .then( json => {
-              console.log("Returned from post:", json);
-              // TODO: test a result was returned!
-              this.offers = json;
-              
-              // reset the form
+              fetch('api/ref/create.php', {
+                  method:'POST',
+                  body: JSON.stringify(this.offerForm),
+                  headers: {
+                    "Content-Type": "application/json; charset=utf-8"
+                  }
+                })
+                .then( response => response.json() )
+                .then( json => {
+                  console.log("Returned from post:", json);
+                  // TODO: test a result was returned!
+                  this.refs = json;
+                  
+                  // reset the form
+                  this.handleResetEdit();
+                });
+  
+          },
+  
+          postDeleteOffer(o) {  
+            // this will confirm whether you want to delete the book or not 
+            if ( !confirm("Are you sure you want to delete " + o.firstName + "?") ) {
+                return;
+            }  
+            // if they do want to it will do this 
+            // this will delete any books in the table 
+            console.log("Delete!", o);
+            
+            fetch('api/ref/delete.php', {
+                method:'POST',
+                body: JSON.stringify(o),
+                headers: {
+                  "Content-Type": "application/json; charset=utf-8"
+                }
+              })
+              .then( response => response.json() )
+              .then( json => {
+                console.log("Returned from post:", json);
+                // TODO: test a result was returned!
+                this.refs = json;
+                
+                // reset the form
+                this.handleResetEdit();
+              });
+          },
+          // handle edit offer 
+          handleEditOffer(offer) {
+              this.selectedOffer = offer;
+              this.offerForm = Object.assign({}, this.selectedOffer);
+          },
+          // handle reset edit 
+          handleResetEdit() {
+              this.selectedOffer = null;
               this.offerForm = {};
-            });
-        }
-    },
+          }
+      },
     created() {
         this.fetchRefData();
         this.fetchGameData();

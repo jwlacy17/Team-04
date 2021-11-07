@@ -35,38 +35,80 @@
               <a class="nav-link" href="assignment.html">Assignments</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="reports.html">Reports</a>
+              <a class="nav-link" href="reports.html">Game Report</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="twitter.html">Twitter</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="api/report1/form.php">Referee Report</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
-      <h1 class="h1"> Games Page </h1>
 
       <div id="offerApp" class="container">
         <div class="row align-items-start">
-        <h1> Game Table </h1>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Game ID</th>
-              <th>Field</th>
-              <th>Time</th>
-              <th>Date </th>
-              <th>Assignment ID</th>
-            </tr>
-          </thead>
-            <tbody>
-                <tr v-for="game in games">
-                    <td>{{ game.gameID }}</td>
-                    <td>{{ game.field }}</td>
-                    <td>{{ game.time }}</td>
-                    <td>{{ game.date }}</td>
-                    <td>{{ game.assignmentID }}</td>
-                </tr>
-            </tbody>
-        </table>
+          <h1 class="display-1"> Game Table </h1>
+      <table class="table table-dark table-striped">
+        <thead>
+          <tr>
+            <th>Game ID</th>
+            <th>Field</th>
+            <th>Time</th>
+            <th>Date</th>
+            <th>AssignmentID </th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+          <tbody>
+              <tr v-for="game in games">
+                <td>{{ game.gameID }}</td>
+                <td>{{ game.field }}</td>
+                <td>{{ game.time }}</td>
+                <td>{{ game.date }}</td>
+                <td>{{ game.assignmentID }}</td>
+                <td>
+                  <button type="button" v-on:click="handleEditOffer(game)"class="btn btn-primary btn-sm" >Edit</button>
+              </td>
+              <td>   <button type="button" v-on:click="postDeleteOffer(game)" class="btn btn-primary btn-sm">Delete</button></td>
+              </tr>
+          </tbody>
+      </table>
       
+        <hr class="style-eight">
+    
+        <h3 class="sel_offer">{{ selectedOffer === null ? "Add " : "Edit " }} Game</h3>
+        <form v-on:submit.prevent="postOffer">
+          <div class="mb-3">
+            <label for="field" class="form-label">Field Name<span class="reqd">*</span></label>
+            <input type="text" v-model="offerForm.field"
+             class="form-control" id="field" placeholder="Field Name" required="required">
+          </div>
+          <div class="mb-3">
+            <label for="time" class="form-label">Game Time<span class="reqd">*</span></label>
+            <input type="time" v-model="offerForm.time" class="form-control" placeholder="Time of Game" id="time"required="required">
+          </div>
+          <div class="mb-3">
+            <label for="date" class="form-label">Date<span class="reqd">*</span></label>
+            <input type="date" v-model="offerForm.date" class="form-control" 
+            placeholder="Date" id="date"required="required">
+          </div>
+          <div class="mb-3">
+            <label for="assignmentID" class="form-label">AssignmentID<span class="reqd">*</span></label>
+            <input type="number" v-model="offerForm.assignmentID"
+             class="form-control" placeholder="AssignmentID" id="assignmentID"required="required">
+          </div>
+          
+          <button type="submit" class="btn btn-primary">{{ selectedOffer === null ? "Add " : "Edit " }} Game </button>
+          <button type="button" class="btn btn-outline-secondary" 
+             v-if="selectedOffer"
+             v-on:click="handleResetEdit">Cancel Edit</button>
+        </form>
+
+
         <!-- <form v-on:submit.prevent="postNewBook">
           <div class="mb-3">
             <label for="title" class="form-label">Book Title </label>
@@ -104,7 +146,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
 
-    <script src="js/index.js"></script>
+    <script src="js/games.js"></script>
   </body>
 
 </html>
